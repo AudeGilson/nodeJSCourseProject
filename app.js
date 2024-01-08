@@ -1,20 +1,19 @@
 const express = require('express');
+const bodyPaser = require('body-parser');
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
 
 const app = express();
 
-app.use('/', (req, res, next) => {
-    console.log('this always run');
-    next();
-});
+app.use(bodyPaser.urlencoded({extended: false}));
 
-app.use('/add-product', (req, res, next) => {
-    console.log('in antoher middleware');
-    res.send('<h1>The add product page</h1>');
-});
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
-app.use('/', (req, res, next) => {
-    console.log('in antoher middleware');
-    res.send('<h1>Hello form express</h1>');
-});
+app.use((req, res, next) => {
+    res.status(404).send('<h1>Page not found</h1>')
+})
 
 app.listen(3000);
